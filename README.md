@@ -1,3 +1,17 @@
+---
+title: "Lab Crossover Event"
+author: "Daniel Fuller"
+date: "11/02/2020"
+output:
+  slidy_presentation: default
+  ioslides_presentation: default
+  beamer_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
 ## R: The Swiss Army Knife of Science
 
 - The R project for statistical computing is a free open source statistical programming language and project. Follow these steps to get started. 
@@ -57,12 +71,40 @@ a + a
 ## Reading in some data
 
 ```{r}
-library(readxl)
+library(readr)
 
-#data <- read_excel("/Your/File/Path/data.xls⁩")
+# data <- read_excel("/Your/File/Path/data.xls⁩")
 
-#data <- read_excel("NL Municipal Candidates.xlsx⁩")
+#nl_candidates <- read_csv("nl_candidates.csv")
+
+nl_candidates <- read_csv("https://github.com/walkabillylab/lab_crossover_r/raw/master/nl_candidates.csv")
 ```
+
+## Some quick descriptive statistics
+
+```{r}
+nl_candidates$`Number of Votes Obtained` <- as.numeric(nl_candidates$`Number of Votes Obtained`)
+
+summary(nl_candidates$`Number of Votes Obtained`)
+```
+
+## Recoding a variable
+
+```{r}
+library(tidyverse)
+nl_candidates <- nl_candidates %>%
+                    mutate(sex = case_when(
+                            Sex == 1 ~ "Male",
+                            Sex == 2 ~ "Female"))
+```
+
+## Recoding a variable
+```{r}
+ggplot(nl_candidates, aes(sex, `Number of Votes Obtained`, fill = sex)) + 
+        geom_boxplot() +  
+        theme_classic()
+```
+
 
 ## The great R wars
 
@@ -98,3 +140,5 @@ Two similar but different methods for many common tasks
 - Full Scientific Paper with R and RMarkdown
     - [Example1](https://libscie.github.io/rmarkdown-workshop/handout.html)
     - [Example2](https://daijiang.name/en/2017/04/05/writing-academic-papers-with-rmarkdown/)
+
+
